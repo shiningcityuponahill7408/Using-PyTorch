@@ -42,9 +42,86 @@ tensor([[[ 0.1000,  7.4000,  0.0000],
 
 ============================================================================================================
 *** collate_fn
+
+
 ============================================================================================================
+*** contiguous v.s non-contiguous tensor
+If the memory is contiguously stored or not
+
+e.g)
+
+x = torch.arange(6).view(2, 3)
+print(x, x.stride())
+print(x.is_contiguous())
+
+>>>
+tensor([[0, 1, 2],
+        [3, 4, 5]]) (3, 1)
+True
+
+remark: the above result is correct in terms of memory image. To get the first value of the next row, it needs to move three offset.
+And one move to get a next column value
+
+Consider the following codes:
+y = x.t()
+print(y, y.stride())
+print(y.is_contiguous())
+
+>>>
+tensor([[0, 3],
+        [1, 4],
+        [2, 5]]) (1, 3)
+False
+
+some operations do not work on non-contiguous tensors. Consider the following:
+
+try:
+    y = y.view(-1)
+except RuntimeError as e:
+    print(e)
+
+>>> 
+view size is not compatible with input tensor's size and stride (at least one dimension spans across two contiguous subspaces). Use .reshape(...) instead.
 
 
+=================================================================================================================
+*** reshape v.s view
+
+view only works on contiguous tensors. But reshape can work with non-contiguous tensors
+
+e.g)
+x = torch.arange(4*10*2).view(4, 10, 2)
+y = x.permute(2, 0, 1)
+
+# View works on contiguous tensors
+print(x.is_contiguous())
+print(x.view(-1))
+
+# Reshape works on non-contigous tensors (contiguous() + view)
+print(y.is_contiguous())
+try: 
+    print(y.view(-1))
+except RuntimeError as e:
+    print(e)
+print(y.reshape(-1))
+print(y.contiguous().view(-1))
+
+=================================================================================================================
+*** what is leaf variable and inplcace operation
+
+leaf variables are directly created variables. 
+e.g) 
+w = torch.tensor([1.0, 2.0, 3.0]) # leaf variable
+x = torch.tensor([1.0, 2.0, 3.0], requires_grad=True) # also leaf variable
+
+y = x**2 # not a leaf variable
+
+
+x += 1  # in-place
+y = x + 1 # not in place
+
+Note that PyTorch doesn’t allow in-place operations on leaf variables that have requires_grad=True 
+=================================================================================================================
 
 
 
