@@ -122,6 +122,9 @@ y = x + 1 # not in place
 
 Note that PyTorch doesn’t allow in-place operations on leaf variables that have requires_grad=True 
 =================================================================================================================
+*** torch.Tensor v.s torch.tensor v.s torch.from_numpy
+
+=================================================================================================================
 
 
 
