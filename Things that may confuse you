@@ -126,8 +126,34 @@ Note that PyTorch doesn’t allow in-place operations on leaf variables that hav
 
 =================================================================================================================
 
+*** from torch.utils.data import Dataset, DataLoader in PyTorch
 
+A dataset is a Python class that allows us to get at the data we’re supplying to the neural network. 
+A data loader is what feeds data from the dataset into the network
 
+Every dataset can interact with PyTorch if it satisfies this abstract Python class:
+class Dataset(object):
+    def __getitem__(self, index):
+        raise NotImplementedError
+
+    def __len__(self):
+        raise NotImplementedError
+        
+ e.g)
+ class MyDataset(Dataset):
+  def __init__(self, x, y):
+    self.x = torch.tensor(x).float()
+    self.y = torch.tensor(y).float()
+  
+  def __len__(self):
+    return len(self.x)
+
+  def __getitem__(self, ix):
+    return self.x[ix], self.y[ix]
+ds = MyDataset(X, Y)
+
+dl = DataLoader(ds, batch_size = 2, shuffle = False) or dl = DataLoader(ds, batch_size = 2, shuffle = True)
+=================================================================================================================
 
 
 
