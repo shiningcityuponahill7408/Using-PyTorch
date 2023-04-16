@@ -154,9 +154,16 @@ ds = MyDataset(X, Y)
 
 dl = DataLoader(ds, batch_size = 2, shuffle = False) or dl = DataLoader(ds, batch_size = 2, shuffle = True)
 =================================================================================================================
+*** nn.Embedding(num_embedding, embedding_dim)
+def: A simple lookup table that stores embeddings of a fixed dictionary and size.
+this maps index to a weight matrix of certain specified dimension. And during the training, weights are adjusted to optimize the performance.
+weights are initialized by randomly
+e.g) 
+
+e = nn.Embedding(10, 50) # this means that there are 10 words, and each 50-dim vector represents one word.
 
 
-
+=================================================================================================================
 
 
 
