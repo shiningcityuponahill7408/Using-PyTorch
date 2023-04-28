@@ -109,7 +109,9 @@ print(y.contiguous().view(-1))
 =================================================================================================================
 *** what is leaf variable and inplcace operation
 
-leaf variables are directly created variables. 
+leaf variables are directly created variables. If this variable is created by the user, then it's a leaf node. If the object is a result of function transformation,
+then it's not a leaf node.
+
 e.g) 
 w = torch.tensor([1.0, 2.0, 3.0]) # leaf variable
 x = torch.tensor([1.0, 2.0, 3.0], requires_grad=True) # also leaf variable
